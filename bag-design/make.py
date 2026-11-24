@@ -31,28 +31,9 @@ base = Image.fromarray(cv2.cvtColor(clean, cv2.COLOR_BGR2RGB)).convert("RGBA")
 # ---- 2. flat logo artwork (front panel, 1000 x 820 units) ----
 W, H = 1000, 820
 art = Image.new("L", (W, H), 0)
-d = ImageDraw.Draw(art)
-cx = W // 2
-
-def spaced(text, f, y, track):
-    widths = [d.textlength(c, font=f) for c in text]
-    total = sum(widths) + track * (len(text) - 1)
-    x = cx - total / 2
-    for c, w in zip(text, widths):
-        d.text((x, y), c, font=f, fill=255, anchor="ls")
-        x += w + track
-
-f_big = font(FONT, 74, 500)
-f_it = font(FONT_I, 46, 400)
-f_sm = font(FONT, 20, 500)
-cy = H // 2 - 10
-spaced("СМОТРИ", f_big, cy - 4, 16)
-d.text((cx, cy + 50), "красиво", font=f_it, fill=255, anchor="ms")
-# fine rules
-d.line([(cx - 150, cy + 86), (cx - 22, cy + 86)], fill=255, width=2)
-d.line([(cx + 22, cy + 86), (cx + 150, cy + 86)], fill=255, width=2)
-d.regular_polygon((cx, cy + 86, 6), 4, fill=255)
-spaced("SMOTRII.KRASIVO", f_sm, cy + 128, 7)
+logo = Image.open(f"{SP}/logo_mask.png").convert("L")
+lw = int(W * 0.62); lh = int(logo.height * lw / logo.width)
+art.paste(logo.resize((lw, lh), Image.LANCZOS), ((W - lw) // 2, (H - lh) // 2 - 20))
 
 # ---- 3. warp onto the bag's front face ----
 quad = np.float32([[276, 258], [803, 400], [776, 912], [262, 700]])

@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 const FONTS = path.resolve(process.argv[2]);
+const LOGO = fs.readFileSync(path.join(__dirname, 'logo.svg'), 'utf8');
 const font = (f) => 'data:font/ttf;base64,' + fs.readFileSync(path.join(FONTS, f)).toString('base64');
 const SIZES = [{ w: 40, h: 30 }, { w: 50, h: 40 }];
 const BAG_W = 900; // ширина пакета на чертеже, px
@@ -25,7 +26,7 @@ function html({ w, h }) {
 body{width:${W}px;height:${H}px;background:#fff;position:relative;font-family:"Liberation Sans",Arial,sans-serif;color:#111}
 svg.lines{position:absolute;inset:0}
 .bag{position:absolute;left:${PADX}px;top:${TOP}px;width:${bw}px;height:${bh}px}
-.logo{position:absolute;left:0;right:0;top:44%;transform:translateY(-50%);text-align:center;font-family:C;color:${GOLD}}
+.logo{position:absolute;left:0;right:0;top:44%;transform:translateY(-50%);text-align:center;font-family:C;color:${GOLD};width:60%;left:20%;right:auto}
 .big{font-weight:700;font-size:${104 * k}px;letter-spacing:${26 * k}px;margin-right:-${26 * k}px;line-height:1}
 .it{font-style:italic;font-weight:500;font-size:${62 * k}px;line-height:1;margin-top:4px}
 .rule{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:18px}
@@ -36,6 +37,7 @@ svg.lines{position:absolute;inset:0}
 .dim{position:absolute;font-size:96px;line-height:1}
 .dw{left:0;right:0;top:${TOP + bh + 30}px;text-align:center}
 .dh{left:${PADX - 40}px;top:${TOP + bh / 2}px;transform:translate(-50%,-50%) rotate(-90deg);white-space:nowrap}
+.logo svg{display:block;width:100%;height:auto}
 </style></head><body>
 <svg class="lines" width="${W}" height="${H}">
   <path d="M ${hx - hw / 2} ${TOP + 2} C ${hx - hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP + 2}" fill="none" stroke="#5a2e55" stroke-width="22"/>
@@ -43,7 +45,7 @@ svg.lines{position:absolute;inset:0}
   <rect x="${PADX}" y="${TOP}" width="${bw}" height="${bh}" fill="${BAG}" stroke="#2a0f20" stroke-width="3"/>
 </svg>
 <div class="bag">
-  <div class="logo"><div class="big">СМОТРИ</div><div class="it">красиво</div><div class="rule"><i></i><b></b><i></i></div></div>
+  <div class="logo">${LOGO}</div>
   <div class="contacts">${IG}<span>smotrii.krasivo</span></div>
 </div>
 <div class="dim dw">${w}cm</div>
