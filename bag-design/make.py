@@ -18,15 +18,26 @@ img = cv2.imread(SRC)
 x0, y0, x1, y1 = 430, 520, 600, 620
 roi = img[y0:y1, x0:x1].astype(int)
 mask = np.zeros(img.shape[:2], np.uint8)
-m = ((roi[:, :, 2] - 75) + (roi[:, :, 1] - 35) > 25).astype(np.uint8) * 255
+m = ((roi[:, :, 2] - 75) + (roi[:, :, 1] - 35) > 8).astype(np.uint8) * 255
 mask[y0:y1, x0:x1] = m
-mask = cv2.dilate(mask, np.ones((7, 7), np.uint8), 2)
+mask = cv2.dilate(mask, np.ones((7, 7), np.uint8), 4)
 clean = cv2.inpaint(img, mask, 9, cv2.INPAINT_TELEA)
 # soften inpaint area with blurred matte to keep paper texture uniform
 blur = cv2.GaussianBlur(clean, (0, 0), 6)
 soft = cv2.GaussianBlur(mask, (0, 0), 6).astype(float)[..., None] / 255
 clean = (clean * (1 - soft) + blur * soft).astype(np.uint8)
-base = Image.fromarray(cv2.cvtColor(clean, cv2.COLOR_BGR2RGB)).convert("RGBA")
+rgb = cv2.cvtColor(clean, cv2.COLOR_BGR2RGB).astype(float)
+L = rgb.mean(2)
+def ss(e0, e1, x):
+    t = np.clip((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t)
+BEIGE = np.array([214, 198, 184]); TAUPE = np.array([168, 146, 130])
+bag = BEIGE * np.clip((L / 50.0) ** 0.55, 0.6, 1.15)[..., None]
+rib = TAUPE * np.clip((L / 105.0) ** 0.6, 0.6, 1.15)[..., None]
+w_rib = ss(68, 88, L)[..., None]
+col = bag * (1 - w_rib) + rib * w_rib
+obj = ss(205, 150, L)[..., None]  # 1 on the bag, 0 on the grey backdrop
+rgb = np.clip(col * obj + rgb * (1 - obj), 0, 255).astype(np.uint8)
+base = Image.fromarray(rgb).convert("RGBA")
 
 # ---- 2. flat logo artwork (front panel, 1000 x 820 units) ----
 W, H = 1000, 820
@@ -54,11 +65,11 @@ mid = 0.45
 g = np.where(t[..., None] < mid,
              c1 + (c2 - c1) * (t[..., None] / mid),
              c2 + (c3 - c2) * ((t[..., None] - mid) / (1 - mid)))
-gold = Image.fromarray(g.astype(np.uint8)).convert("RGBA")
+gold = Image.new("RGBA", base.size, (28, 21, 18, 255))
 gold.putalpha(alpha.point(lambda v: int(v * 0.96)))
 
 # subtle deboss shadow under foil
-sh = Image.new("RGBA", base.size, (20, 5, 15, 0))
+sh = Image.new("RGBA", base.size, (255, 250, 245, 0))
 sh.putalpha(alpha.filter(ImageFilter.GaussianBlur(1.2)).point(lambda v: int(v * 0.45)))
 out = base.copy()
 out.alpha_composite(sh, (1, 1))
@@ -66,7 +77,7 @@ out.alpha_composite(gold)
 out.convert("RGB").save(OUT, quality=95)
 
 # flat print layout too
-fl = Image.new("RGB", (W, H), (62, 25, 48))
-fl.paste(Image.new("RGB", (W, H), (222, 188, 125)), mask=art)
+fl = Image.new("RGB", (W, H), (214, 198, 184))
+fl.paste(Image.new("RGB", (W, H), (28, 21, 18)), mask=art)
 fl.save(OUT.replace(".jpg", "_flat.png"))
 print("done")

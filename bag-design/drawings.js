@@ -10,7 +10,7 @@ const font = (f) => 'data:font/ttf;base64,' + fs.readFileSync(path.join(FONTS, f
 const SIZES = [{ w: 40, h: 30 }, { w: 50, h: 40 }];
 const BAG_W = 900; // ширина пакета на чертеже, px
 
-const BAG="#3e1930", GOLD="#d9b97c", RIBBON="#8a5a86";
+const BAG="#d6c6b8", GOLD="#1c1512", RIBBON="#a89282";
 const IG = `<svg viewBox="0 0 24 24" fill="none" stroke="${GOLD}" stroke-width="2"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.6" cy="6.4" r="1.1" fill="${GOLD}" stroke="none"/></svg>`;
 
 function html({ w, h }) {
@@ -40,9 +40,9 @@ svg.lines{position:absolute;inset:0}
 .logo svg{display:block;width:100%;height:auto}
 </style></head><body>
 <svg class="lines" width="${W}" height="${H}">
-  <path d="M ${hx - hw / 2} ${TOP + 2} C ${hx - hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP + 2}" fill="none" stroke="#5a2e55" stroke-width="22"/>
+  <path d="M ${hx - hw / 2} ${TOP + 2} C ${hx - hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP + 2}" fill="none" stroke="#7d6a5c" stroke-width="22"/>
   <path d="M ${hx - hw / 2} ${TOP + 2} C ${hx - hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP + 2}" fill="none" stroke="${RIBBON}" stroke-width="16"/>
-  <rect x="${PADX}" y="${TOP}" width="${bw}" height="${bh}" fill="${BAG}" stroke="#2a0f20" stroke-width="3"/>
+  <rect x="${PADX}" y="${TOP}" width="${bw}" height="${bh}" fill="${BAG}" stroke="#8f7c6e" stroke-width="3"/>
 </svg>
 <div class="bag">
   <div class="logo">${LOGO}</div>
