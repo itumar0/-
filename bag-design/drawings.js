@@ -9,7 +9,8 @@ const font = (f) => 'data:font/ttf;base64,' + fs.readFileSync(path.join(FONTS, f
 const SIZES = [{ w: 40, h: 30 }, { w: 50, h: 40 }];
 const BAG_W = 900; // ширина пакета на чертеже, px
 
-const IG = `<svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.6" cy="6.4" r="1.1" fill="#111" stroke="none"/></svg>`;
+const BAG="#3e1930", GOLD="#d9b97c", RIBBON="#8a5a86";
+const IG = `<svg viewBox="0 0 24 24" fill="none" stroke="${GOLD}" stroke-width="2"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.3"/><circle cx="17.6" cy="6.4" r="1.1" fill="${GOLD}" stroke="none"/></svg>`;
 
 function html({ w, h }) {
   const s = BAG_W / w, bw = BAG_W, bh = Math.round(h * s);
@@ -24,22 +25,22 @@ function html({ w, h }) {
 body{width:${W}px;height:${H}px;background:#fff;position:relative;font-family:"Liberation Sans",Arial,sans-serif;color:#111}
 svg.lines{position:absolute;inset:0}
 .bag{position:absolute;left:${PADX}px;top:${TOP}px;width:${bw}px;height:${bh}px}
-.logo{position:absolute;left:0;right:0;top:44%;transform:translateY(-50%);text-align:center;font-family:C;color:#111}
+.logo{position:absolute;left:0;right:0;top:44%;transform:translateY(-50%);text-align:center;font-family:C;color:${GOLD}}
 .big{font-weight:700;font-size:${104 * k}px;letter-spacing:${26 * k}px;margin-right:-${26 * k}px;line-height:1}
 .it{font-style:italic;font-weight:500;font-size:${62 * k}px;line-height:1;margin-top:4px}
 .rule{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:18px}
-.rule i{display:block;width:150px;height:2px;background:#111}
-.rule b{display:block;width:10px;height:10px;background:#111;transform:rotate(45deg)}
-.contacts{position:absolute;left:0;right:0;bottom:${Math.round(bh * 0.08)}px;display:flex;justify-content:center;align-items:center;gap:12px;font-size:27px;letter-spacing:.5px}
+.rule i{display:block;width:150px;height:2px;background:${GOLD}}
+.rule b{display:block;width:10px;height:10px;background:${GOLD};transform:rotate(45deg)}
+.contacts{position:absolute;left:0;right:0;bottom:${Math.round(bh * 0.08)}px;display:flex;justify-content:center;align-items:center;gap:12px;font-size:27px;letter-spacing:.5px;color:${GOLD}}
 .contacts svg{width:38px;height:38px}
 .dim{position:absolute;font-size:96px;line-height:1}
 .dw{left:0;right:0;top:${TOP + bh + 30}px;text-align:center}
 .dh{left:${PADX - 40}px;top:${TOP + bh / 2}px;transform:translate(-50%,-50%) rotate(-90deg);white-space:nowrap}
 </style></head><body>
 <svg class="lines" width="${W}" height="${H}">
-  <path d="M ${hx - hw / 2} ${TOP + 2} C ${hx - hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP + 2}" fill="none" stroke="#111" stroke-width="15"/>
-  <path d="M ${hx - hw / 2} ${TOP + 2} C ${hx - hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP + 2}" fill="none" stroke="#fff" stroke-width="10"/>
-  <rect x="${PADX}" y="${TOP}" width="${bw}" height="${bh}" fill="#fff" stroke="#111" stroke-width="3"/>
+  <path d="M ${hx - hw / 2} ${TOP + 2} C ${hx - hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP + 2}" fill="none" stroke="#5a2e55" stroke-width="22"/>
+  <path d="M ${hx - hw / 2} ${TOP + 2} C ${hx - hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP - hh * 1.25}, ${hx + hw / 2} ${TOP + 2}" fill="none" stroke="${RIBBON}" stroke-width="16"/>
+  <rect x="${PADX}" y="${TOP}" width="${bw}" height="${bh}" fill="${BAG}" stroke="#2a0f20" stroke-width="3"/>
 </svg>
 <div class="bag">
   <div class="logo"><div class="big">СМОТРИ</div><div class="it">красиво</div><div class="rule"><i></i><b></b><i></i></div></div>
